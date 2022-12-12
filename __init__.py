@@ -86,8 +86,14 @@ class GraphCreator:
         self.PreComputed = PreComputed
         print(self.PreComputed," Data_Path is:",DATA_PATH)
         if(self.PreComputed==1):
-            self.adjList = DATA_PATH+"Adjacent list ac zones.xlsx"
+            self.adjList = DATA_PATH+"PreComputed/Adjacent list ac zones.xlsx"
             print("In PreComputed 1 Less GOOOOOOO",self.adjList)
+        elif(self.PreComputed==2):
+            self.adjList = DATA_PATH+"PreComputed/States_Neighbors.xlsx"
+            print("In PreComputed 2 Less GOOOOOOO",self.adjList)  
+        elif(self.PreComputed==3):
+            self.adjList = DATA_PATH+"PreComputed/TalukAdjacencyFrame.xlsx"
+            print("In PreComputed 3 Less GOOOOOOO",self.adjList)  
         else:
             self.adjList =adjList
         self.BeforeInterventionFile = BeforeInterventionFolder
@@ -101,9 +107,11 @@ class GraphCreator:
         self.G= nx.Graph()
         self.init_graph_attr1()
         return self
+
     def updateValues(self,Graph):
         for node_no in range(Graph.values.no_nodes):
             self.values.node_attri_dict[self.values.node_list[node_no]]= Graph.G.nodes[node_no]["sdgvec"]
+    
     def init_graph_attr1(self): 
         nodeAttr = {}
         self.init_graph1()
@@ -134,12 +142,11 @@ class GraphCreator:
             if ',' in str(temp):
                 sedge_arr=temp.split(',')
                 for i in range(0,len(sedge_arr)):
-                    self.G.add_edge(snode,int(sedge_arr[i])-1)
-                    
-            elif math.isnan(temp) :
-                print()
+                    self.G.add_edge(snode,int(sedge_arr[i])-1)  
+            elif temp==np.nan:
+                print("New error")
             else :
-                self.G.add_edge(snode,temp-1)
+                self.G.add_edge(snode,int(temp)-1)
         return
      
 class Values:
@@ -322,13 +329,24 @@ def ATEFunction1(a):
   return sum(a)
   
 def ViewAdjList():
-    print("Agroclimatic zone:")
+    print("Option PreComputed=1, Agroclimatic zone in Karnataka")
     adjList = DATA_PATH+"Adjacent list ac zones.xlsx"
     df=pd.read_excel(adjList)
     print(df)
+    print("-------------------------------------------")
+    print("Option PreComputed=2, States Neighbours for SDG in India")
+    adjList = DATA_PATH+"PreComputed/States_Neighbors.xlsx"
+    df=pd.read_excel(adjList)
+    print(df)
+    print("-------------------------------------------")
+    print("Option PreComputed=3, Taluk adjacency list")
+    adjList = DATA_PATH+"PreComputed/TalukAdjacencyFrame.xlsx"
+    df=pd.read_excel(adjList)
+    print(df)
+    print("-------------------------------------------")
 
    
-
+Graph_obj1= CreateGraph(BeforeInterventionFolder=r"./data/Before",AfterInterventionFolder=r"./data/After",adjList=r"./data/Adjacent list ac zones_test.xlsx",function="L2 Norm",PreComputed=0)
 # Graph_obj1= CreateGraph(BeforeInterventionFolder=r"./data/Before",AfterInterventionFolder=r"./data/After",adjList=r"./data/Adjacent list ac zones.xlsx",function="L2 Norm",PreComputed=1)
 # result1,graphUpdated1=StressModelling(Graph_obj1,numRounds=10,EpsilonStress=0)
 # # print(result1.NodesDict)
