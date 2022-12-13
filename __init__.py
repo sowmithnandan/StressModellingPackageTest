@@ -86,13 +86,13 @@ class GraphCreator:
         self.PreComputed = PreComputed
         print(self.PreComputed," Data_Path is:",DATA_PATH)
         if(self.PreComputed==1):
-            self.adjList = DATA_PATH+"PreComputed/Adjacent list ac zones.xlsx"
+            self.adjList = DATA_PATH+"PreComputedGraphs/Adjacent list ac zones.xlsx"
             print("In PreComputed 1 Less GOOOOOOO",self.adjList)
         elif(self.PreComputed==2):
-            self.adjList = DATA_PATH+"PreComputed/States_Neighbors.xlsx"
+            self.adjList = DATA_PATH+"PreComputedGraphs/States_Neighbors.xlsx"
             print("In PreComputed 2 Less GOOOOOOO",self.adjList)  
         elif(self.PreComputed==3):
-            self.adjList = DATA_PATH+"PreComputed/TalukAdjacencyFrame.xlsx"
+            self.adjList = DATA_PATH+"PreComputedGraphs/TalukAdjacencyFrame.xlsx"
             print("In PreComputed 3 Less GOOOOOOO",self.adjList)  
         else:
             self.adjList =adjList
@@ -245,17 +245,40 @@ def StressModelling(Graph_objOriginal,numRounds,EpsilonStress,SM_function ="grad
             NodesDict[Graph_obj.G.nodes[n]["name"]].append(Graph_obj.G.nodes[n]["sdgvec"])
         print("Till here also it cames\n")
         Graph_obj.updateValues(Graph_obj)
-        resultObject = ResultObject(NodesDict,MeanSDGs,MeanStress)
+        resultObject = ResultObject(NodesDict,MeanSDGs,MeanStress,numRounds)
         return resultObject,Graph_obj
 
 class ResultObject:
     NodesDict = None
     MeanSDGs = None
     MeanStress = None
-    def __init__(self, NodeDict,MeanSDGs,MeanStress):
+    TransposedFlag = False
+    TransposedNodesDict =None
+    nodesList = None 
+    def __init__(self, NodeDict,MeanSDGs,MeanStress,numRounds):
         self.NodesDict = NodeDict
         self.MeanSDGs = MeanSDGs
         self.MeanStress = MeanStress
+        self.numRounds = numRounds
+    def returnTranspose(self):
+        if(self.TransposedFlag):
+            return self.TransposedNodesDict
+        self.nodesList = list(self.NodesDict.keys())
+        print("dictionary keys:", self.nodesList)
+        self.TransposedFlag = True
+        numberOfItr = len(self.NodesDict[self.nodesList[0]])
+        print("number of iterations:",numberOfItr)
+        self.TransposedNodesDict = { }
+        for i in range(numberOfItr):
+            self.TransposedNodesDict[str(i)] = {}
+            for j in range(1,len(self.NodesDict[self.nodesList[0]][0])+1):
+                self.TransposedNodesDict[str(i)]["var"+str(j)] = []
+        # print(self.TransposedNodesDict)
+        for keys in self.NodesDict:
+            for i in range(len(self.NodesDict[keys])):
+                for j in range(len(self.NodesDict[keys][i])):
+                    self.TransposedNodesDict[str(i)]["var"+str(j+1)].append(self.NodesDict[keys][i][j])
+        return self.TransposedNodesDict
 
     
     
@@ -330,26 +353,43 @@ def ATEFunction1(a):
   
 def ViewAdjList():
     print("Option PreComputed=1, Agroclimatic zone in Karnataka")
-    adjList = DATA_PATH+"Adjacent list ac zones.xlsx"
+    adjList = DATA_PATH+"PreComputedGraphs/Adjacent list ac zones.xlsx"
     df=pd.read_excel(adjList)
     print(df)
     print("-------------------------------------------")
     print("Option PreComputed=2, States Neighbours for SDG in India")
-    adjList = DATA_PATH+"PreComputed/States_Neighbors.xlsx"
+    adjList = DATA_PATH+"PreComputedGraphs/States_Neighbors.xlsx"
     df=pd.read_excel(adjList)
     print(df)
     print("-------------------------------------------")
     print("Option PreComputed=3, Taluk adjacency list")
-    adjList = DATA_PATH+"PreComputed/TalukAdjacencyFrame.xlsx"
+    adjList = DATA_PATH+"PreComputedGraphs/TalukAdjacencyFrame.xlsx"
     df=pd.read_excel(adjList)
     print(df)
     print("-------------------------------------------")
 
+
+def DownloadAdjList(option,filePath):
+    if(option==1):
+        adjList = DATA_PATH+"PreComputedGraphs/Adjacent list ac zones.xlsx"
+    elif(option==2):
+        adjList = DATA_PATH+"PreComputedGraphs/States_Neighbors.xlsx"
+    elif(option==3):
+        adjList = DATA_PATH+"PreComputedGraphs/TalukAdjacencyFrame.xlsx"
+    else: 
+        print("Option entered is not valid")
+        return 0
+    df=pd.read_excel(adjList)
+    df.to_excel(filePath)
+    return 1
+
+
    
-Graph_obj1= CreateGraph(BeforeInterventionFolder=r"./data/Before",AfterInterventionFolder=r"./data/After",adjList=r"./data/Adjacent list ac zones_test.xlsx",function="L2 Norm",PreComputed=0)
+# Graph_obj1= CreateGraph(BeforeInterventionFolder=r"./data/Before",AfterInterventionFolder=r"./data/After",adjList=r"./data/Adjacent list ac zones_test.xlsx",function="L2 Norm",PreComputed=0)
 # Graph_obj1= CreateGraph(BeforeInterventionFolder=r"./data/Before",AfterInterventionFolder=r"./data/After",adjList=r"./data/Adjacent list ac zones.xlsx",function="L2 Norm",PreComputed=1)
 # result1,graphUpdated1=StressModelling(Graph_obj1,numRounds=10,EpsilonStress=0)
-# # print(result1.NodesDict)
+# print(result1.NodesDict)
+# print(result1.returnTranspose())
 # print(Graph_obj1.values.node_attri_dict)
 # print(Graph_obj1.G.nodes[0])
 # print(graphUpdated1.values.node_attri_dict)
