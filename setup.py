@@ -11,7 +11,7 @@ classifiers = [
  
 setup(
   name='StressModellingPackageTest',
-  version='0.0.33',
+  version='0.0.41',
   description=' ',
   long_description=open('README.txt').read(),
   url           = '',  
@@ -22,6 +22,6 @@ setup(
   keywords      = 'Stress Modelling', 
   packages      = ['StressModellingPackageTest'],
   package_dir   = {'StressModellingPackageTest':'StressModellingPackageTest'},
-  package_data  = {'StressModellingPackageTest':['data/Adjacent list ac zones.xlsx']},
+  package_data  = {'StressModellingPackageTest':['data/*','data/PreComputedGraphs/*']},
   install_requires=[''] 
 )
