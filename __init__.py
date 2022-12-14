@@ -38,8 +38,6 @@ class Scalarization:
             finalVal += valIter[i]
         return finalVal
 
-    def NoATE(self,valIter):
-        return valIter[0]
 
     def getFunction(self,selection="L2 Norm"):
         if selection=="L2 Norm":
