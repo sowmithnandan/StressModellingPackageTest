@@ -37,12 +37,18 @@ class Scalarization:
             finalVal += (valIter[i]*(i+1))
         return (finalVal/3)
         # return (val1*1+val2*2+val3*3)/3
-    
+    def Sum(self,valIter): # returns same val for single item
+        finalVal =0 
+        for i in range(len(valIter)):
+            finalVal += valIter[i]
+        return finalVal
     def getFunction(self,selection="L2 Norm"):
         if selection=="L2 Norm":
             return self.L2_Norm
         elif selection == "ATE":
             return self.ATE
+        elif selection == "Sum":
+            return self.Sum
         return selection
 
 #add more here
@@ -81,7 +87,7 @@ class GraphCreator:
         pass
         # return self.MakeGraph()
 
-    def MakeGraph(self,BeforeInterventionFolder,AfterInterventionFolder,adjList,function ="L2 Norm",PreComputed=0,col_select =[2,3]):
+    def MakeGraph(self,BeforeInterventionFolder,AfterInterventionFolder,adjList,function ="L2 Norm",PreComputed=0,col_select =[2,3],cat_bins=[1,3,4]):
         print("Make Graph arguments are:",BeforeInterventionFolder,AfterInterventionFolder,adjList,function,PreComputed,col_select)
         self.PreComputed = PreComputed
         print(self.PreComputed," Data_Path is:",DATA_PATH)
@@ -100,10 +106,11 @@ class GraphCreator:
         self.AfterInterventionFile = AfterInterventionFolder
         print(self.BeforeInterventionFile,self.AfterInterventionFile,self.adjList)
         self.col_select = col_select
+        self.cat_bins = cat_bins
         self.function = function
         self.scalrization_func=Scalarization().getFunction(function)
         print(col_select,self.col_select)
-        self.values=Values(self.BeforeInterventionFile, self.AfterInterventionFile,self.adjList,self.col_select,self.scalrization_func)
+        self.values=Values(self.BeforeInterventionFile, self.AfterInterventionFile,self.adjList,self.col_select,self.cat_bins,self.scalrization_func)
         self.G= nx.Graph()
         self.init_graph_attr1()
         return self
@@ -150,11 +157,12 @@ class GraphCreator:
         return
      
 class Values:
-    def __init__(self,BeforeFolder, AfterFolder, AdjFile,col_select,sclarisation_func):
+    def __init__(self,BeforeFolder, AfterFolder, AdjFile,col_select,cat_bins,sclarisation_func):
         self.BeforeFolder= BeforeFolder
         self.AfterFolder = AfterFolder
         self.AdjFile=AdjFile
         self.col_select=col_select
+        self.cat_bins=cat_bins
         self.sclarisation_func=sclarisation_func
         self.node_list=[]
         self.attr_list =[]
@@ -183,7 +191,9 @@ class Values:
             tempExcel = pd.read_excel(Folder+"/"+filename)
             for j in self.col_select: 
                 # The line below has to be changed based on the input format later
-                CategoryProbabilitesList = [float(tempExcel.iloc[j][1]),float(tempExcel.iloc[j][3]),float(tempExcel.iloc[j][4])]
+                CategoryProbabilitesList = []
+                for k in self.cat_bins:
+                    CategoryProbabilitesList.append(float(tempExcel.iloc[j][k]))
                 scalarvalue = self.sclarisation_func(CategoryProbabilitesList)
                 attribute_dict[tempExcel.iloc[j][0]].append(scalarvalue)
         print(attribute_dict)
@@ -272,15 +282,29 @@ class ResultObject:
         for i in range(numberOfItr):
             self.TransposedNodesDict[str(i)] = {}
             for j in range(1,len(self.NodesDict[self.nodesList[0]][0])+1):
-                self.TransposedNodesDict[str(i)]["var"+str(j)] = []
+                self.TransposedNodesDict[str(i)]["var"+str(j)] = [] 
         # print(self.TransposedNodesDict)
         for keys in self.NodesDict:
             for i in range(len(self.NodesDict[keys])):
                 for j in range(len(self.NodesDict[keys][i])):
                     self.TransposedNodesDict[str(i)]["var"+str(j+1)].append(self.NodesDict[keys][i][j])
         return self.TransposedNodesDict
-
-    
+    def Visualize(self,var_no,node_list):
+        for node in self.NodesDict.keys():
+            if node in node_list:
+                temp_list=[]
+                for l in self.NodesDict[node]:
+                    if var_no > len(l):
+                        print ("Attribute number is inaccurate")
+                        return
+                    temp_list.append(l[var_no-1])
+                plt.plot(range(self.numRounds+1),temp_list,label=str(node))
+        plt.xlabel("Time Steps")
+        plt.ylabel("Attribute value over timesteps")
+        plt.legend()
+        plt.show()
+                
+                    
     
 # class Root:
 #     def __init__(self):

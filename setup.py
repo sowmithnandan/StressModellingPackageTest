@@ -11,7 +11,7 @@ classifiers = [
  
 setup(
   name='StressModellingPackageTest',
-  version='0.0.41',
+  version='0.0.47',
   description=' ',
   long_description=open('README.txt').read(),
   url           = '',  
