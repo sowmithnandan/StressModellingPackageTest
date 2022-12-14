@@ -46,8 +46,6 @@ class Scalarization:
             return self.ATE
         elif selection == "Sum":
             return self.Sum
-        elif selection=="NoATE":
-            return self.NoATE
         return selection
 
 #add more here
