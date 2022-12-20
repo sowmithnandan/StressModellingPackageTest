@@ -11,6 +11,7 @@ from pprint import pprint
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import figure
 import os 
+import geopandas as gpd
 
 DATA_PATH = pkg_resources.resource_filename('StressModellingPackageTest', 'data/')
 print(DATA_PATH)
@@ -111,6 +112,8 @@ class GraphCreator:
         self.scalrization_func=Scalarization().getFunction(function)
         print(col_select,self.col_select)
         self.values=Values(self.BeforeInterventionFile, self.AfterInterventionFile,self.adjList,self.col_select,self.cat_bins,self.scalrization_func)
+        if(self.values.flag==False):
+            return False
         self.G= nx.Graph()
         self.init_graph_attr1()
         return self
@@ -170,7 +173,8 @@ class Values:
         self.node_adj_frame = None
         self.no_nodes =None
         self.no_attri = None
-        self.populate_after()
+        self.flag=self.populate_after()
+        
 
     def preprocess(self,Folder): # col_select =[2,3]
         df = pd.DataFrame()
@@ -209,6 +213,12 @@ class Values:
         self.node_attri_dict = dict(zip(df["Nodes"], df.sdgvec))
         # df2['sdgvec'] = df2[attribute_list].values.tolist()
         self.node_adj_frame=pd.read_excel(self.AdjFile)
+        if(Validate(self.AfterFolder,self.BeforeFolder,self.AdjFile)==False):
+                print("No of Nodes do not Match")
+                return False
+        else:
+            return True
+
 
 def StressModelling(Graph_objOriginal,numRounds,EpsilonStress,SM_function ="gradient_descent"):
         print("Graph_objOriginal:",Graph_objOriginal)
@@ -372,6 +382,20 @@ def CreateGraph(BeforeInterventionFolder,AfterInterventionFolder,adjList,functio
     return Graph_obj
 
 # Test CODE
+def Validate(AfterFolder,BeforeFolder,AdjFile):
+    a,b,c=0,0,0
+    print("No of Nodes in AdjFile")
+    df=pd.read_excel(AdjFile)
+    a=df.shape[0]
+    print(a)
+    print("No of Nodes in Before Intervention Folder")
+    b=len(os.listdir(BeforeFolder))
+    print(b)
+    print("No of Nodes in After Intervention Folder")
+    c=len(os.listdir(AfterFolder))
+    print(c)
+    return a==c
+
 def ATEFunction1(a):
   return sum(a)
   
@@ -406,6 +430,42 @@ def DownloadAdjList(option,filePath):
     df=pd.read_excel(adjList)
     df.to_excel(filePath)
     return 1
+
+#Standalone to generate shape file and download
+def ShapetoAdjFile(shapeFile,filePath,NodeColName):
+    gdf = gpd.read_file(shapeFile)
+    gdf["NEIGHBORS"] = None  
+
+    for index, country in gdf.iterrows():   
+
+        # get 'not disjoint' countries
+        neighbors = gdf[~gdf.geometry.disjoint(country.geometry)][NodeColName].tolist()
+
+        # remove own name of the country from the list
+        neighbors = [ name for name in neighbors if country[NodeColName] != name ]
+
+        # add names of neighbors as NEIGHBORS value
+        gdf.at[index, "NEIGHBORS"] = ", ".join(neighbors)
+    taluk_index_dict={}
+    for i in range(len(gdf[NodeColName])):
+        print(gdf[NodeColName][i])
+        taluk_index_dict[gdf[NodeColName][i]]=i+1
+
+    print(taluk_index_dict)
+    final_L =[]
+    for i in range(len(gdf["NEIGHBORS"])):
+        l_temp= gdf["NEIGHBORS"][i].split(", ")
+        l=list(map(lambda x: str(taluk_index_dict[x]),l_temp))
+        print(l)
+        final_L.append(",".join(l))
+    gdf["NEIGHBORS_new"] = final_L
+    df_new =pd.DataFrame()
+    df_new=gdf.filter([NodeColName,'NEIGHBORS_new'], axis=1)
+    df_new["S.NO"]=[_ for _ in range(1,len(taluk_index_dict)+1)]
+    df_new=df_new[["S.NO",NodeColName,'NEIGHBORS_new']]
+    # save GeoDataFrame as a new file
+    print(df_new)
+    df_new.to_excel(filePath+"/shapeToAdjFrame.xlsx",index=False)
 
 
    
