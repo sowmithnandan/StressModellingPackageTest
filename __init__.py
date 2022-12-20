@@ -14,13 +14,8 @@ import os
 import geopandas as gpd
 
 DATA_PATH = pkg_resources.resource_filename('StressModellingPackageTest', 'data/')
-print(DATA_PATH)
-# class Graph:
-#     G = nx.Graph()
-#     nodeAttr = {}
-#     def __init__(self,graph,attributes):
-#         self.G = graph
-#         self.nodeAttr = attributes
+# print("DATA_PATH within the package to the data is :",DATA_PATH)
+
 class Scalarization:
     def __init__(self):
         pass
@@ -37,12 +32,14 @@ class Scalarization:
         for i in range(len(valIter)):
             finalVal += (valIter[i]*(i+1))
         return (finalVal/3)
-        # return (val1*1+val2*2+val3*3)/3
+        
     def Sum(self,valIter): # returns same val for single item
         finalVal =0 
         for i in range(len(valIter)):
             finalVal += valIter[i]
         return finalVal
+
+
     def getFunction(self,selection="L2 Norm"):
         if selection=="L2 Norm":
             return self.L2_Norm
@@ -63,7 +60,6 @@ class GraphCreator:
         meanSDG = 0
         for n in self.G.nodes():
             meanSDG += np.mean(np.array(self.G.nodes[n][label]))
-        #print(meanSDG," ",num)
         return meanSDG / self.values.no_attri
 
     def getGraphStress2(self,label):
@@ -82,35 +78,24 @@ class GraphCreator:
         return stress
 
     def __init__(self):
-        # self.BeforeATEFile = BeforeATEFile
-        # self.AfterATEFile = AfterATEFile
-        # self.adjList = adjList
         pass
-        # return self.MakeGraph()
 
     def MakeGraph(self,BeforeInterventionFolder,AfterInterventionFolder,adjList,function ="L2 Norm",PreComputed=0,col_select =[2,3],cat_bins=[1,3,4]):
-        print("Make Graph arguments are:",BeforeInterventionFolder,AfterInterventionFolder,adjList,function,PreComputed,col_select)
         self.PreComputed = PreComputed
-        print(self.PreComputed," Data_Path is:",DATA_PATH)
         if(self.PreComputed==1):
             self.adjList = DATA_PATH+"PreComputedGraphs/Adjacent list ac zones.xlsx"
-            print("In PreComputed 1 Less GOOOOOOO",self.adjList)
         elif(self.PreComputed==2):
-            self.adjList = DATA_PATH+"PreComputedGraphs/States_Neighbors.xlsx"
-            print("In PreComputed 2 Less GOOOOOOO",self.adjList)  
+            self.adjList = DATA_PATH+"PreComputedGraphs/States_Neighbors.xlsx" 
         elif(self.PreComputed==3):
             self.adjList = DATA_PATH+"PreComputedGraphs/TalukAdjacencyFrame.xlsx"
-            print("In PreComputed 3 Less GOOOOOOO",self.adjList)  
         else:
             self.adjList =adjList
         self.BeforeInterventionFile = BeforeInterventionFolder
         self.AfterInterventionFile = AfterInterventionFolder
-        print(self.BeforeInterventionFile,self.AfterInterventionFile,self.adjList)
         self.col_select = col_select
         self.cat_bins = cat_bins
         self.function = function
         self.scalrization_func=Scalarization().getFunction(function)
-        print(col_select,self.col_select)
         self.values=Values(self.BeforeInterventionFile, self.AfterInterventionFile,self.adjList,self.col_select,self.cat_bins,self.scalrization_func)
         if(self.values.flag==False):
             return False
@@ -154,7 +139,7 @@ class GraphCreator:
                 for i in range(0,len(sedge_arr)):
                     self.G.add_edge(snode,int(sedge_arr[i])-1)  
             elif temp==np.nan:
-                print("New error")
+                print("ERROR:None found in th adjacency excel sheet")
             else :
                 self.G.add_edge(snode,int(temp)-1)
         return
@@ -180,7 +165,6 @@ class Values:
         df = pd.DataFrame()
         attribute_dict={}
         for filename in os.listdir(Folder):
-            # print(filename.split(" ")[0])
             cntr=0
             self.node_list.append(filename.split(" ")[0])
             tempExcel = pd.read_excel(Folder+"/"+filename)
@@ -194,13 +178,11 @@ class Values:
         for filename in os.listdir(Folder):
             tempExcel = pd.read_excel(Folder+"/"+filename)
             for j in self.col_select: 
-                # The line below has to be changed based on the input format later
                 CategoryProbabilitesList = []
                 for k in self.cat_bins:
                     CategoryProbabilitesList.append(float(tempExcel.iloc[j][k]))
                 scalarvalue = self.sclarisation_func(CategoryProbabilitesList)
                 attribute_dict[tempExcel.iloc[j][0]].append(scalarvalue)
-        print(attribute_dict)
         df["Nodes"] = self.node_list
         for attribute in self.attr_list:
             df[attribute] = attribute_dict[attribute]  
@@ -221,9 +203,6 @@ class Values:
 
 
 def StressModelling(Graph_objOriginal,numRounds,EpsilonStress,SM_function ="gradient_descent"):
-        print("Graph_objOriginal:",Graph_objOriginal)
-        print("EpsilonStress:",EpsilonStress)
-        print("SM_function:",SM_function)
         # BeforeInterventionFolder,AfterInterventionFolder,adjList,function ="L2 Norm",PreComputed=0,col_select =[2,3]
         graphCreatorObj = GraphCreator()
         Graph_obj = graphCreatorObj.MakeGraph(Graph_objOriginal.BeforeInterventionFile,
@@ -237,33 +216,21 @@ def StressModelling(Graph_objOriginal,numRounds,EpsilonStress,SM_function ="grad
             NodesDict[i] = []
         MeanSDGs = []
         MeanStress = [] 
-        # Graph_obj.init_graph_attr1()
-        print("Number Of Rounds :"+str(numRounds))
-        # print("Punjabs SDG 5 after Policy Intervention:",G2.nodes[19]['sdgvec'])
-        # PolicyIntervention(G,label,nodeIDs,Policies)
         for i in range(numRounds):
-            # print(i)
             temp1 = Graph_obj.getMeanSDGGraph2("sdgvec")
             temp2 = Graph_obj.getGraphStress2("sdgvec")
-            #print(" Mean SDG Graph is: ",temp1," Graph Stress is:",temp2)
             MeanSDGs.append(temp1)
             MeanStress.append(temp2)
             for n in Graph_obj.G.nodes():
-                # print(Graph_obj.G.nodes[n]["name"])
                 NodesDict[Graph_obj.G.nodes[n]["name"]].append(Graph_obj.G.nodes[n]["sdgvec"])
             if temp2>=EpsilonStress:
-            # PolicyIntervention(G,Policies,NodeIDs,numSDGs,label)
                 func1=StressReduction().getFunction(SM_function)
-                # print(func)
-                print(Graph_obj.G,Graph_obj.values.no_attri)
                 func1(Graph_obj.G,"sdgvec" ,"tempsdgvec",Graph_obj.values.no_attri)
             else:
                 print(i,"stress less than epsilon")
                 break
-        print("Till her it cames\n")
         for n in Graph_obj.G.nodes(): 
             NodesDict[Graph_obj.G.nodes[n]["name"]].append(Graph_obj.G.nodes[n]["sdgvec"])
-        print("Till here also it cames\n")
         Graph_obj.updateValues(Graph_obj)
         resultObject = ResultObject(NodesDict,MeanSDGs,MeanStress,numRounds)
         return resultObject,Graph_obj
@@ -280,32 +247,31 @@ class ResultObject:
         self.MeanSDGs = MeanSDGs
         self.MeanStress = MeanStress
         self.numRounds = numRounds
+
     def returnTranspose(self):
         if(self.TransposedFlag):
             return self.TransposedNodesDict
         self.nodesList = list(self.NodesDict.keys())
-        print("dictionary keys:", self.nodesList)
         self.TransposedFlag = True
         numberOfItr = len(self.NodesDict[self.nodesList[0]])
-        print("number of iterations:",numberOfItr)
         self.TransposedNodesDict = { }
         for i in range(numberOfItr):
             self.TransposedNodesDict[str(i)] = {}
             for j in range(1,len(self.NodesDict[self.nodesList[0]][0])+1):
                 self.TransposedNodesDict[str(i)]["var"+str(j)] = [] 
-        # print(self.TransposedNodesDict)
         for keys in self.NodesDict:
             for i in range(len(self.NodesDict[keys])):
                 for j in range(len(self.NodesDict[keys][i])):
                     self.TransposedNodesDict[str(i)]["var"+str(j+1)].append(self.NodesDict[keys][i][j])
         return self.TransposedNodesDict
+
     def Visualize(self,var_no,node_list):
         for node in self.NodesDict.keys():
             if node in node_list:
                 temp_list=[]
                 for l in self.NodesDict[node]:
                     if var_no > len(l):
-                        print ("Attribute number is inaccurate")
+                        print ("ERROR:Attribute number is inaccurate")
                         return
                     temp_list.append(l[var_no-1])
                 plt.plot(range(self.numRounds+1),temp_list,label=str(node))
@@ -314,45 +280,6 @@ class ResultObject:
         plt.legend()
         plt.show()
                 
-                    
-    
-# class Root:
-#     def __init__(self):
-#         self.ReturnObject=[]
-#     def StressModelling(self,Graph_obj,numRounds,EpsilonStress,SM_function ="gradient_descent"):
-#         NodesDict = {}
-#         for i in Graph_obj.values.node_list:
-#             NodesDict[i] = []
-#         MeanSDGs = []
-#         MeanStress = [] 
-#         Graph_obj.init_graph_attr1()
-#         print("Number Of Rounds :"+str(numRounds))
-#         # print("Punjabs SDG 5 after Policy Intervention:",G2.nodes[19]['sdgvec'])
-#         # PolicyIntervention(G,label,nodeIDs,Policies)
-#         for i in range(numRounds):
-#             # print(i)
-#             temp1 = Graph_obj.getMeanSDGGraph2("sdgvec")
-#             temp2 = Graph_obj.getGraphStress2("sdgvec")
-#             #print(" Mean SDG Graph is: ",temp1," Graph Stress is:",temp2)
-#             MeanSDGs.append(temp1)
-#             MeanStress.append(temp2)
-#             for n in Graph_obj.G.nodes(): 
-#                 print(Graph_obj.G.nodes[n]["name"])
-#                 NodesDict[Graph_obj.G.nodes[n]["name"]].append(Graph_obj.G.nodes[n]["sdgvec"])
-#             if temp2>=EpsilonStress:
-#             # PolicyIntervention(G,Policies,NodeIDs,numSDGs,label)
-#                 func=StressReduction().getFunction(SM_function)
-#                 print(func)
-#                 func(Graph_obj.G,"sdgvec" ,"tempsdgvec",Graph_obj.values.no_attri)
-#             else:
-#                 print(i,"stress less than epsilon")
-#                 break
-#         print("Till her it cames\n")
-#         for n in Graph_obj.G.nodes(): 
-#             NodesDict[Graph_obj.G.nodes[n]["name"]].append(Graph_obj.G.nodes[n]["sdgvec"])
-#         print("Till here also it cames\n")
-#         return NodesDict
-
 
 class StressReduction:
     def __init__(self) -> None:
@@ -468,20 +395,15 @@ def ShapetoAdjFile(shapeFile,filePath,NodeColName):
     df_new.to_excel(filePath+"/shapeToAdjFrame.xlsx",index=False)
 
 
-   
-# Graph_obj1= CreateGraph(BeforeInterventionFolder=r"./data/Before",AfterInterventionFolder=r"./data/After",adjList=r"./data/Adjacent list ac zones_test.xlsx",function="L2 Norm",PreComputed=0)
+# Test CODE 
+
 # Graph_obj1= CreateGraph(BeforeInterventionFolder=r"./data/Before",AfterInterventionFolder=r"./data/After",adjList=r"./data/Adjacent list ac zones.xlsx",function="L2 Norm",PreComputed=1)
-# result1,graphUpdated1=StressModelling(Graph_obj1,numRounds=10,EpsilonStress=0)
-# print(result1.NodesDict)
-# print(result1.returnTranspose())
+
 # print(Graph_obj1.values.node_attri_dict)
 # print(Graph_obj1.G.nodes[0])
 # print(graphUpdated1.values.node_attri_dict)
 # print(graphUpdated1.G.nodes[0])
-# class VizualizationMethods:
 
-
-# def StressModelling():
 
 
 
