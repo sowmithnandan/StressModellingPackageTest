@@ -23,3 +23,4 @@ Below are 2 usecases that attempts the above stated hypothesis.
 Usecase 1 :  Stress Modelling considering an existing SDG system with its capability vectors
 
 Usecase 2 :  Stress Modelling while constructing a system using bayesian networks.
+             https://colab.research.google.com/drive/1wS3M9gEIb1UbWPoiXqMtnyW35dOBO1Tx?usp=sharing
