@@ -21,9 +21,9 @@ After which we note the change in target post intervention on its neighbouring r
 Below are 2 usecases that attempts the above stated hypothesis.
 
 * Usecase 1 :  Stress Modelling while constructing a system using bayesian networks.
-             * 1. [Agroclimatic Zones](https://colab.research.google.com/drive/1wS3M9gEIb1UbWPoiXqMtnyW35dOBO1Tx?usp=sharing)
-             * 2. [Taluks] (https://colab.research.google.com/drive/1eG0Oom91g0HBFEEGiqIAZ-cAlgB5kGkq?usp=sharing)
+             *[Agroclimatic Zones](https://colab.research.google.com/drive/1wS3M9gEIb1UbWPoiXqMtnyW35dOBO1Tx?usp=sharing)
+             *[Taluks](https://colab.research.google.com/drive/1eG0Oom91g0HBFEEGiqIAZ-cAlgB5kGkq?usp=sharing)
 * Usecase 2 :  Stress Modelling considering an existing SDG system with its capability vectors
-              * [Sates] (https://colab.research.google.com/drive/1QIsjVz-semReDFIbY8LkF5KGkqloggTY?usp=sharing)
+              *[Sates](https://colab.research.google.com/drive/1QIsjVz-semReDFIbY8LkF5KGkqloggTY?usp=sharing)
 
 
