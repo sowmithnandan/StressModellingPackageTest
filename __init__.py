@@ -52,7 +52,6 @@ class Scalarization:
 #add more here
 
 class GraphCreator:
-    BeforeInterventionFile = ""
     AfterInterventionFile = "" 
     adjList = ""
     PreComputed = 0
@@ -80,7 +79,7 @@ class GraphCreator:
     def __init__(self):
         pass
 
-    def MakeGraph(self,BeforeInterventionFolder,AfterInterventionFolder,adjList,function ="L2 Norm",PreComputed=0,col_select =[2,3],cat_bins=[1,3,4]):
+    def MakeGraph(self,AfterInterventionFolder,adjList,function ="L2 Norm",PreComputed=0,col_select =[2,3],cat_bins=[1,3,4]):
         self.PreComputed = PreComputed
         if(self.PreComputed==1):
             self.adjList = DATA_PATH+"PreComputedGraphs/Adjacent list ac zones.xlsx"
@@ -90,13 +89,12 @@ class GraphCreator:
             self.adjList = DATA_PATH+"PreComputedGraphs/TalukAdjacencyFrame.xlsx"
         else:
             self.adjList =adjList
-        self.BeforeInterventionFile = BeforeInterventionFolder
         self.AfterInterventionFile = AfterInterventionFolder
         self.col_select = col_select
         self.cat_bins = cat_bins
         self.function = function
         self.scalrization_func=Scalarization().getFunction(function)
-        self.values=Values(self.BeforeInterventionFile, self.AfterInterventionFile,self.adjList,self.col_select,self.cat_bins,self.scalrization_func)
+        self.values=Values(self.AfterInterventionFile,self.adjList,self.col_select,self.cat_bins,self.scalrization_func)
         if(self.values.flag==False):
             return False
         self.G= nx.Graph()
@@ -145,8 +143,7 @@ class GraphCreator:
         return
      
 class Values:
-    def __init__(self,BeforeFolder, AfterFolder, AdjFile,col_select,cat_bins,sclarisation_func):
-        self.BeforeFolder= BeforeFolder
+    def __init__(self, AfterFolder, AdjFile,col_select,cat_bins,sclarisation_func):
         self.AfterFolder = AfterFolder
         self.AdjFile=AdjFile
         self.col_select=col_select
@@ -195,7 +192,7 @@ class Values:
         self.node_attri_dict = dict(zip(df["Nodes"], df.sdgvec))
         # df2['sdgvec'] = df2[attribute_list].values.tolist()
         self.node_adj_frame=pd.read_excel(self.AdjFile)
-        if(Validate(self.AfterFolder,self.BeforeFolder,self.AdjFile)==False):
+        if(Validate(self.AfterFolder,self.AdjFile)==False):
                 print("No of Nodes do not Match")
                 return False
         else:
@@ -205,12 +202,12 @@ class Values:
 def StressModelling(Graph_objOriginal,numRounds,EpsilonStress,SM_function ="gradient_descent"):
         # BeforeInterventionFolder,AfterInterventionFolder,adjList,function ="L2 Norm",PreComputed=0,col_select =[2,3]
         graphCreatorObj = GraphCreator()
-        Graph_obj = graphCreatorObj.MakeGraph(Graph_objOriginal.BeforeInterventionFile,
-                                            Graph_objOriginal.AfterInterventionFile,
+        Graph_obj = graphCreatorObj.MakeGraph(Graph_objOriginal.AfterInterventionFile,
                                             Graph_objOriginal.adjList,
                                             Graph_objOriginal.function,
                                             Graph_objOriginal.PreComputed,
-                                            Graph_objOriginal.col_select)
+                                            Graph_objOriginal.col_select,
+                                            Graph_objOriginal.cat_bins)
         NodesDict = {}
         for i in Graph_obj.values.node_list:
             NodesDict[i] = []
@@ -304,20 +301,17 @@ class StressReduction:
             return self.Gradient_Descent
         return SM_function
 
-def CreateGraph(BeforeInterventionFolder,AfterInterventionFolder,adjList,function,PreComputed):
-    Graph_obj =  GraphCreator().MakeGraph(BeforeInterventionFolder=BeforeInterventionFolder,AfterInterventionFolder=AfterInterventionFolder,adjList=adjList,function=function,PreComputed=PreComputed)
+def CreateGraph(AfterInterventionFolder,adjList,function,PreComputed):
+    Graph_obj =  GraphCreator().MakeGraph(AfterInterventionFolder=AfterInterventionFolder,adjList=adjList,function=function,PreComputed=PreComputed)
     return Graph_obj
 
 # Test CODE
-def Validate(AfterFolder,BeforeFolder,AdjFile):
-    a,b,c=0,0,0
+def Validate(AfterFolder,AdjFile):
+    a,c=0,0
     print("No of Nodes in AdjFile")
     df=pd.read_excel(AdjFile)
     a=df.shape[0]
     print(a)
-    print("No of Nodes in Before Intervention Folder")
-    b=len(os.listdir(BeforeFolder))
-    print(b)
     print("No of Nodes in After Intervention Folder")
     c=len(os.listdir(AfterFolder))
     print(c)
