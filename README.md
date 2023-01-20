@@ -139,7 +139,7 @@ Converts .shp files to an adjacency list excel file.
 * Parameters:
     * ```shapeFile```: string <br>
 Path yo the <>.shp file. The folder must also contain: 
-    * ```filePath`` : string <br>
+    * ```filePath``` : string <br>
 Path to the folder where new excel must be downloaded.
     * ```NodeColName```: string <br>
 Column name in the shape file, from which node names should be picked. 
