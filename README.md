@@ -26,4 +26,21 @@ Below are 2 usecases that attempts the above stated hypothesis.
 * Usecase 2 :  Stress Modelling considering an existing SDG system with its capability vectors
   * [Sates](https://colab.research.google.com/drive/1QIsjVz-semReDFIbY8LkF5KGkqloggTY?usp=sharing)
 
+#DOCUMENTATION 
 
+```
+StressModellingPackageTest.DownloadAdjList(option, filePath)
+```
+
+Description:  The package has a few pre-loaded graphs which can be used by the users to conduct their simulations. This function downloads the adjacency lists of these graphs. The user can run his simulations on an updated tweaked version of a pre-loaded graph by downloading its adjacency list, changing it and then using it with the Make Graph function. 
+
+Parameters: 
+```Option```: integer(1,2,3)
+	1:-   Adjacency list for Agro-Climatic zones of Karnataka 
+	2:-   Adjacency list for the States of India 
+	3:-   Adjacency list for Taluks of Karnataka
+```filePath```: string 
+	  The location where the adjacency list gets downloaded. 
+    
+ <hr>
+ 
