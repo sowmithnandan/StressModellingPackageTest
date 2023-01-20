@@ -127,7 +127,7 @@ finalVal =0
 ```
 
 * Returned Values:
-        * ```finalValue```:float <br>
+	* ```finalValue```:float <br>
 Scalarized value for a given dimension.
 
 <hr>
@@ -138,7 +138,7 @@ Converts .shp files to an adjacency list excel file.
 
 * Parameters:
     * ```shapeFile```: string <br>
-Path yo the <>.shp file. The folder must also contain: 
+Path to the <>.shp file. The folder must also contain: 
     * ```filePath``` : string <br>
 Path to the folder where new excel must be downloaded.
     * ```NodeColName```: string <br>
