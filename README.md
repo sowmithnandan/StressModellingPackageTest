@@ -18,7 +18,7 @@ will witness an influx of people from the neighbouring provinces,thus reducing t
 We build a system considering most probable factors that have an affect on target. Later we intervene at some nodes and observe its impact on target.
 After which we note the change in target post intervention on its neighbouring regions and observe its stability over time steps.
 
-Below are 2 usecases that attempts the above stated hypothesis.
+<Below are 2 usecases that attempts the above stated hypothesis.>
 
 * Usecase 1 :  Stress Modelling while constructing a system using bayesian networks.
   *  [Agroclimatic Zones](https://colab.research.google.com/drive/1wS3M9gEIb1UbWPoiXqMtnyW35dOBO1Tx?usp=sharing)
