@@ -36,7 +36,6 @@ Install my-project with pip
     
 ## Documentation
 
-The package structure can be explained in the below steps.
 
 <details><summary>Preface</summary><p>
   Build a bayesian network for a Target using [Netica](https://www.norsys.com/netica.html) or [bnlearn](https://pypi.org/project/bnlearn/) understanding the dependent and independent variables affecting the Target.
