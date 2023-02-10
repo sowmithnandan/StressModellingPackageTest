@@ -200,3 +200,7 @@ The package has a few pre-loaded graphs which can be used by the users to conduc
 Does not return anything. Just prints the required information
 
 <hr>
+	
+<details><summary>Code example</summary><p>
+  ...
+</p></details>
