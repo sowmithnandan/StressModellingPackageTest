@@ -131,7 +131,7 @@ Below are 2 case studies worked out as part of project.
 1. For Goal 2, Target 2.4 we have build a bayesian model considering the dependent and independent variables for 
 improving yield for rice and wheat crops.[Target 2.4 - Crop Yield Model](https://kdl.iiitb.ac.in/a3-1-crop-yield/)
 
-We considered intervening at **NPK Consumption** variable and simulated the intervention across Agro-climatic zones of Karnataka (In order to maximize the production from the available resources and prevailing climatic conditions, need-based, location specific technology needs to be generated. Delineation of agro-climatic zones based on soil, water, rainfall, temperature etc. is the first essential step for sustainable production.An “Agro-climatic zone” is a land unit in terms of major climates, suitable for a certain range of crops and cultivars.Agro-climatic conditions mainly refer to soil types, rainfall, temperature and water availability which influence the type of vegetations.)
+We considered intervening at **NPK Consumption** variable and simulated the intervention across Agro-climatic zones of Karnataka 
 
 For details regarding implementation and results, please refer to the Collab notebook --> [Open in Colab](https://colab.research.google.com/drive/1wS3M9gEIb1UbWPoiXqMtnyW35dOBO1Tx?usp=sharing)
 
@@ -261,12 +261,10 @@ The list of node names, as strings, whose behaviour you want to visualize , over
 <hr>
 
 
-
-
 ## Authors
 
-- Arpitha, Sowmith, Niharika, Srinath
+- Arpitha Malavalli, Sowmith Nandan, Niharika Sri Parasa, Srinath Srinivasa
 
 In case of quieries, please contact 
-@email.
+sowmith.nandan@iiitb.ac.in, arpitha.malavalli@iiitb.ac.in, niharikasri.parasa@iiitb.ac.in
 
