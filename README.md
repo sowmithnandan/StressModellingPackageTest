@@ -135,7 +135,7 @@ We considered intervening at **NPK Consumption** variable and simulated the inte
 
 For details regarding implementation and results, please refer to the Collab notebook --> [Open in Colab](https://colab.research.google.com/drive/1wS3M9gEIb1UbWPoiXqMtnyW35dOBO1Tx?usp=sharing)
 
-2. Another case study we attempted stress modelling considering the existing SDG framework is to understand an interventions impact other Indian states capability vector (vector curated with the composite scores of all 17 SDG's).
+2. Another case study we attempted stress modelling is considering the existing UN SDG framework to understand an interventions impact other Indian states capability vector (vector curated with the composite scores of all 17 SDG's).
 
 For details regarding implementation and results, please refer to the Collab notebook -->[Open in Colab](https://colab.research.google.com/drive/1QIsjVz-semReDFIbY8LkF5KGkqloggTY?usp=sharing)
 
@@ -150,7 +150,7 @@ with  [Department of Planning and Statistics, Government of Karnataka, India](ht
 
 ## Demo
 
-[Video link]()
+[Video link](https://iiitbac-my.sharepoint.com/personal/sowmith_nandan_iiitb_ac_in/_layouts/15/stream.aspx?id=%2Fpersonal%2Fsowmith%5Fnandan%5Fiiitb%5Fac%5Fin%2FDocuments%2Fdemo%20video%20for%20IJCAI%20paper%2FFinal%5Fdemo%5FVideo%2Emp4&ga=1)
 
 
 ## Support
