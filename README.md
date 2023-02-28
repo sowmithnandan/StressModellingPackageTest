@@ -150,7 +150,7 @@ with  [Department of Planning and Statistics, Government of Karnataka, India](ht
 
 ## Demo
 
-[Video link](https://iiitbac-my.sharepoint.com/personal/sowmith_nandan_iiitb_ac_in/_layouts/15/stream.aspx?id=%2Fpersonal%2Fsowmith%5Fnandan%5Fiiitb%5Fac%5Fin%2FDocuments%2Fdemo%20video%20for%20IJCAI%20paper%2FFinal%5Fdemo%5FVideo%2Emp4&ga=1)
+[Video link](https://rb.gy/jabyaw)
 
 
 ## Support
