@@ -40,7 +40,7 @@ Install my-project with pip
 <details><summary>Preface</summary><p>
   Build a bayesian network for a Target using [Netica](https://www.norsys.com/netica.html) or [bnlearn](https://pypi.org/project/bnlearn/) understanding the dependent and independent variables affecting the Target.
 
- To understand why Bayesian Networks and how to build one ? Refer to the paper "[Network Learning on Open Data to aid Policy Making"](https://ceur-ws.org/Vol-3211/CR_098.pdf)
+ To understand why Bayesian Networks and how to build one ? Refer to the paper ["Network Learning on Open Data to aid Policy Making"](https://ceur-ws.org/Vol-3211/CR_098.pdf)
 
  The targets from your bayesian network form the capability vector. When intervened at one or more variables, there will be change in capability vector. [[Refer to "A Data-driven Approach for Supporting Policy Intervention in Sustainable Development"]](https://ic-sd.org/wp-content/uploads/2022/11/submission_357.pdf)
 
@@ -265,5 +265,5 @@ The list of node names, as strings, whose behaviour you want to visualize , over
 
 - Arpitha Malavalli, Sowmith Nandan, Niharika Sri Parasa, Srinath Srinivasa
 
-In case of quieries, please contact 
-sowmith.nandan@iiitb.ac.in, arpitha.malavalli@iiitb.ac.in, niharikasri.parasa@iiitb.ac.in
+In case of queries, please contact 
+sowmith.nandan@iiitb.ac.in, arpitha.malavalli@iiitb.ac.in, niharikasri.parasa@iiitb.ac.in, sri@iiitb.ac.in
