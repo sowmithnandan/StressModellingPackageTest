@@ -152,6 +152,11 @@ with  [Department of Planning and Statistics, Government of Karnataka, India](ht
 
 [Video link](https://rb.gy/jabyaw)
 
+## Examples
+Here are few different scenarios where we have used the package:
+Scenario 1: [Perfroming Stress Modelling For Agroclimatic Zone level Policy Interventions performed using Netica](https://colab.research.google.com/drive/1wS3M9gEIb1UbWPoiXqMtnyW35dOBO1Tx?usp=sharing) 
+Scenario 2: [Perfroming Stress Modelling For Taluks of Karnataka. Policy Interventions performed using Netica](https://colab.research.google.com/drive/1eG0Oom91g0HBFEEGiqIAZ-cAlgB5kGkq?usp=sharing)
+Scenario 3: [Perfroming Stress Modelling States of India. Policy Interventions performed by changing SDG values for year 2020](https://colab.research.google.com/drive/1QIsjVz-semReDFIbY8LkF5KGkqloggTY?usp=sharing#scrollTo=LtQZYlSlxfp5)
 
 ## Support
 
